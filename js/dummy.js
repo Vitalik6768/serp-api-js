@@ -6,6 +6,8 @@ spinner.style.display = "none";
 
 
 let serpData = [];
+let newData = [];
+let webSites = [];
 let testData = {
     "general": {
         "language": "en",
@@ -33,6 +35,7 @@ let testData = {
         },
         {
             "rank": 3,
+            "url":"www.xx.com",
             "link": "#",
             "display_link": "www.britannica.com › ... › Islands & Archipelagos",
             "title": "Greenland | History, Geography, & Culture | Britannica",
@@ -40,6 +43,7 @@ let testData = {
         },
         {
             "rank": 4,
+            "url":"www.tipi2.com",
             "link": "#",
             "display_link": "www.imdb.com › title",
             "title": "Greenland (2020) - IMDb",
@@ -56,6 +60,7 @@ let testData = {
         },
         {
             "rank": 5,
+            "url":"www.tipi3.com",
             "link": "#",
             "display_link": "nsidc.org › greenland-today",
             "title": "Greenland Ice Sheet Today | Surface Melt Data presented by ...",
@@ -81,8 +86,30 @@ let testData = {
                 }
             ]
         },
+
         {
+            "url": "www.newsite.com",
+            "rank": 9,
+            "link": "#",
+            "display_link": "www.bbc.com › news › world-europe-18249474",
+            "title": "Greenland profile - BBC News - BBC.com",
+            "description": "Greenland is the world's largest island and an autonomous Danish dependent territory with limited self-government and its own parliament.",
+            "extensions": [
+                {
+                    "text": "Jul 23, 2018",
+                    "inline": true
+                }
+            ]
+        },
+
+
+
+
+
+        {
+
             "rank": 7,
+            "url":"www.xx.com",
             "link": "#",
             "display_link": "www.bbc.com › news › science-environment-54127279",
             "title": "Climate change: Warmth shatters section of Greenland ice ...",
@@ -180,20 +207,84 @@ let testData = {
 }
 
 
- function displsyTestData(){
-   serpData.push(testData);
+ let displsyTestData = (siteRank) => {
+
+   let maxPosition = 0;
 
    for(let site of serpData){
      let org = site.organic;
-     console.log(site);
       for(let elm of org){
+        if(siteRank){
+          if(elm.rank > siteRank && maxPosition < 7){
+            maxPosition++;
+            const newJsaon = new Object;
+            newJsaon.rank = elm.rank;
+            newJsaon.url = elm.url;
+            newData.push(newJsaon);
+            webSites.push(elm.url);
+          }
+        }else{
+          sortData(elm);
+        }
 
-          let li = document.createElement('li');
-          li.className = "list-group-item list-group-item-action list-group-item-info";
-          li.innerText = ` Title : ${elm.title} | Position ${elm.rank}`;
-          document.querySelector('ol').appendChild(li);
 }
    }
+
  }
 
-displsyTestData();
+ const sortData = (elm, siteRank) => {
+
+    if(elm.url == 'www.tipi.com'){
+      let siteRank = elm.rank;
+      displsyTestData(siteRank);
+    }
+ }
+
+const similarWeb = () =>{
+  const counts = {};
+  webSites.forEach((x) => {
+    counts[x] = (counts[x] || 0) + 1;
+    if(counts[x] > 1){
+      console.log(x);
+
+      let li = document.createElement('li');
+      li.className = "list-group-item d-flex justify-content-between align-items-start";
+      let divA = document.createElement('div');
+      divA.className = "ms-2 me-auto";
+      let divB = document.createElement('div');
+      divB.className = "fw-bold";
+      divB.innerText = `${x}`;
+      let divC = document.createElement('div');
+
+      li.appendChild(divA);
+
+      divA.appendChild(divB);
+      divA.insertBefore(divC, null);
+      //divB.appendChild(divC);
+
+      for(let site of newData){
+        if(site.url == x){
+          let p = document.createElement('p');
+          p.innerText=`${site.rank} `;
+          divC.appendChild(p);
+          console.log(site.rank);
+        }
+        document.querySelector('ol').appendChild(li);
+
+      }
+    }
+
+  });
+
+
+}
+const initDisplay = () =>{
+  //similarWeb();
+   serpData.push(testData);
+   displsyTestData();
+   similarWeb();
+   //console.log(webSites);
+}
+
+
+initDisplay();
