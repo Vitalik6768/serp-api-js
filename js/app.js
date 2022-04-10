@@ -1,5 +1,5 @@
 
-const apiKey = 'fdcf0d55319161f5e027b459910763a0';
+const apiKey = '';
 let serpData = [];
 let newData = [];
 let competitorSites = [];
@@ -24,7 +24,7 @@ btn.addEventListener('click', function() {
   }else{
     alert('Please Enter Keyword');
   }
-  
+
 });
 
 makeRequest = (searchKeyword, lin) =>{
